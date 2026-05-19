@@ -1,5 +1,7 @@
 # REVER — AI Agent for Workflow Failure Resolution
 
+> **Note:** This prototype was built based on a general understanding of REVER's product, processes, and technology stack. All assumptions about workflows, infrastructure, and tooling are inferred from that general knowledge — no internal systems, real data, or proprietary information were accessed.
+
 ## The Problem
 
 REVER's return workflows are complex, multi-step processes that can run for days. A return journey involves validating an order, evaluating fraud risk, generating shipping labels, coordinating with carriers, waiting for warehouse inspection, and finally processing the refund.
