@@ -1,0 +1,68 @@
+VECTOR DE DECISIÓN — REVER AGENT
+=================================
+
+Cada fila del CSV representa un caso resuelto.
+Cada columna es una posición del vector numérico (todos los valores entre 0.0 y 1.0).
+
+POSICIÓN  NOMBRE                       DESCRIPCIÓN
+────────────────────────────────────────────────────────────────────────────────
+
+--- GRUPO 1: EL FALLO ---
+
+0    step_index                   Qué step falló. STEP_1=0.0 ... STEP_9=1.0
+1    error_type_503               1 si el error fue un 503, 0 si no
+2    error_type_429               1 si el error fue un 429 (rate limit), 0 si no
+3    error_type_400               1 si el error fue un 400 (datos inválidos), 0 si no
+4    error_type_timeout           1 si el error fue timeout, 0 si no
+5    error_type_fraud             1 si el error fue fraude detectado, 0 si no
+6    error_type_non_retryable     1 si el error fue NonRetryable, 0 si no
+7    error_type_unknown           1 si el error es desconocido, 0 si no
+8    attempt_number               Número de intento normalizado. 1→0.0, 5→1.0
+9    consecutive_same_error       Fallos consecutivos del mismo tipo. max=5 → 1.0
+10   refund_already_issued        1 si ya se emitió reembolso instantáneo, 0 si no
+11   money_at_risk                Valor del pedido normalizado. €0→0.0, €500+→1.0
+
+--- GRUPO 2: EL SISTEMA EXTERNO ---
+
+12   system_type_carrier          1 si el sistema que falló es un carrier, 0 si no
+13   system_type_ecommerce        1 si el sistema que falló es el ecommerce, 0 si no
+14   system_type_payment          1 si el sistema que falló es la pasarela de pago, 0 si no
+15   system_type_internal         1 si el sistema que falló es interno de REVER, 0 si no
+16   system_has_incident          1 si hay incidencia activa confirmada, 0 si no
+17   incident_severity            Severidad. 0.0=ninguna, 0.5=degraded, 1.0=down
+18   alternative_available        1 si hay sistema alternativo disponible, 0 si no
+
+--- GRUPO 3: EL RIESGO FINANCIERO ---
+
+19   order_value_normalized       Valor del pedido. €0→0.0, €500+→1.0
+20   payment_is_refundable        1 si la transacción original sigue siendo reversible
+21   days_since_purchase          Días desde la compra. 0→0.0, 180 días→1.0
+22   refund_reversible            1 si el reembolso instantáneo puede revertirse
+
+--- GRUPO 4: EL CLIENTE ---
+
+23   fraud_score                  Score de fraude. 0.0=limpio, 1.0=alto riesgo
+24   return_rate                  Tasa de devoluciones del cliente. 0.0 a 1.0
+25   account_age_normalized       Antigüedad de cuenta. nuevo→0.0, 3 años+→1.0
+26   returns_this_month           Devoluciones este mes. 0→0.0, 5+→1.0
+
+--- GRUPO 5: CONTEXTO ---
+
+27   hour_of_day                  Hora del fallo. 0h→0.0, 23h→1.0
+28   is_weekend                   1 si es fin de semana, 0 si no
+29   is_international             1 si la devolución cruza fronteras, 0 si no
+30   country_risk                 Riesgo logístico del país. 0.0=bajo, 1.0=alto
+
+--- GRUPO 6: LA DECISIÓN (solo en filas guardadas) ---
+
+31   decision_RETRY               1 si la decisión fue RETRY, 0 si no
+32   decision_RETRY_LATER         1 si la decisión fue RETRY_LATER, 0 si no
+33   decision_SKIP                1 si la decisión fue SKIP, 0 si no
+34   decision_ESCALATE            1 si la decisión fue ESCALATE, 0 si no
+35   decision_worked              1 si la decisión resolvió el problema, 0 si no
+36   resolution_time_normalized   Tiempo hasta resolución. 0=inmediato, 1=24h+
+
+────────────────────────────────────────────────────────────────────────────────
+TOTAL: 37 posiciones por vector
+Los vectores de búsqueda usan posiciones 0-30 (31 valores).
+Los vectores guardados usan posiciones 0-36 (37 valores).

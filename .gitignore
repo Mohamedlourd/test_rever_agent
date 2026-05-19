@@ -1,0 +1,18 @@
+# Model weights — download locally with: python agent/llm/download.py
+agent/llm/models/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Environment
+.env
+
+# VS Code
+.vscode/

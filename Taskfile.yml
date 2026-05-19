@@ -1,0 +1,42 @@
+version: '3'
+
+vars:
+  VENV_DIR: .venv
+  PYTHON: '{{if eq OS "windows"}}{{.VENV_DIR}}\Scripts\python.exe{{else}}{{.VENV_DIR}}/bin/python{{end}}'
+  PIP: '{{if eq OS "windows"}}{{.VENV_DIR}}\Scripts\pip.exe{{else}}{{.VENV_DIR}}/bin/pip{{end}}'
+
+tasks:
+  setup:
+    desc: "Crea el entorno virtual e instala dependencias"
+    cmds:
+      - python3 -m venv {{.VENV_DIR}}
+      - '{{.PIP}} install --upgrade pip'
+      - '{{.PIP}} install -r requirements.txt'
+    status:
+      - test -d {{.VENV_DIR}}
+    
+  download-model:
+    desc: "Descarga el modelo LLM (Qwen2.5-0.5B-Instruct)"
+    deps: [setup]
+    cmds:
+      - '{{.PYTHON}} agent/llm/download.py'
+    
+  clean:
+    desc: "Elimina el entorno virtual"
+    cmds:
+      - rm -rf {{.VENV_DIR}}
+      - cmd: rmdir /s /q {{.VENV_DIR}}
+        platforms: [windows]
+    
+  reinstall:
+    desc: "Reinstala todo desde cero"
+    cmds:
+      - task: clean
+      - task: setup
+      - task: download-model
+
+  install:
+    desc: "Alias para setup + download-model"
+    cmds:
+      - task: setup
+      - task: download-model
