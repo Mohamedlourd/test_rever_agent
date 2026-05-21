@@ -16,3 +16,17 @@ build/
 
 # VS Code
 .vscode/
+
+# Data analysis — raw datasets (confidential)
+data_analisis/07.08.08.01.01 Carriers 2025/
+data_analisis/07.08.08.01.02 REVER 2025/
+
+# Data analysis — processed/intermediate files
+data_analisis/processed/
+
+# Data analysis — reports and images (generated output)
+data_analisis/report_*.md
+data_analisis/report_*.pdf
+data_analisis/report_*.docx
+data_analisis/~$*.docx
+data_analisis/images/
